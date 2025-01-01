@@ -1,3 +1,74 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.human-svg.idle .arm-left,
+.human-svg.idle .arm-right,
+.human-svg.idle .leg-left,
+.human-svg.idle .leg-right {
+  animation: none;
+}
+
+.human-svg.running .arm-left {
+  animation: swing 0.5s infinite alternate;
+}
+
+.human-svg.running .arm-right {
+  animation: swing-reverse 0.5s infinite alternate;
+}
+
+.human-svg.running .leg-left {
+  animation: step 0.5s infinite alternate;
+}
+
+.human-svg.running .leg-right {
+  animation: step-reverse 0.5s infinite alternate;
+}
+
+.human-svg.jumping {
+  animation: jump 0.8s infinite;
+}
+
+@keyframes swing {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(30deg);
+  }
+}
+
+@keyframes swing-reverse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-30deg);
+  }
+}
+
+@keyframes step {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(20deg);
+  }
+}
+
+@keyframes step-reverse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-20deg);
+  }
+}
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
