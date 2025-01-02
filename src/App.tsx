@@ -1,10 +1,10 @@
 import "./App.css";
-import HumanAnimation from "./components/human";
+import Scene from "./components/Scene";
 
 function App() {
   return (
-    <div className="w-full h-full bg-red-500">
-      <HumanAnimation />
+    <div className="w-screen min-h-screen h-full grid items-center">
+      <Scene />
     </div>
   )
 }

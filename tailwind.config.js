@@ -6,19 +6,27 @@ export default {
       keyframes: {
         armLeftSwing: {
           "0%, 100%": { transform: "rotate(0deg)" },
-          "50%": { transform: "rotate(-30deg)" },
+          "25%": { transform: "rotate(-30deg) translateY(5px)" }, // Bend at elbow
+          "50%": { transform: "rotate(0deg) translateY(0px)" },
+          "75%": { transform: "rotate(30deg) translateY(5px)" }, // Bend at elbow
         },
         armRightSwing: {
           "0%, 100%": { transform: "rotate(0deg)" },
-          "50%": { transform: "rotate(30deg)" },
+          "25%": { transform: "rotate(30deg) translateY(5px)" }, // Bend at elbow
+          "50%": { transform: "rotate(0deg) translateY(0px)" },
+          "75%": { transform: "rotate(-30deg) translateY(5px)" }, // Bend at elbow
         },
         legLeftSwing: {
           "0%, 100%": { transform: "rotate(0deg)" },
-          "50%": { transform: "rotate(-40deg)" },
+          "25%": { transform: "rotate(-45deg) translateY(10px)" }, // Bend at knee
+          "50%": { transform: "rotate(0deg) translateY(0px)" },
+          "75%": { transform: "rotate(45deg) translateY(10px)" }, // Bend at knee
         },
         legRightSwing: {
           "0%, 100%": { transform: "rotate(0deg)" },
-          "50%": { transform: "rotate(40deg)" },
+          "25%": { transform: "rotate(45deg) translateY(10px)" }, // Bend at knee
+          "50%": { transform: "rotate(0deg) translateY(0px)" },
+          "75%": { transform: "rotate(-45deg) translateY(10px)" }, // Bend at knee
         },
         jump: {
           "0%, 100%": { transform: "translateY(0)" },
@@ -26,10 +34,10 @@ export default {
         },
       },
       animation: {
-        "arm-left": "armLeftSwing 0.5s infinite ease-in-out",
-        "arm-right": "armRightSwing 0.5s infinite ease-in-out",
-        "leg-left": "legLeftSwing 0.5s infinite ease-in-out",
-        "leg-right": "legRightSwing 0.5s infinite ease-in-out",
+        "arm-left": "armLeftSwing 1s infinite ease-in-out",
+        "arm-right": "armRightSwing 1s infinite ease-in-out",
+        "leg-left": "legLeftSwing 1s infinite ease-in-out",
+        "leg-right": "legRightSwing 1s infinite ease-in-out",
         jump: "jump 0.8s infinite ease-in-out",
       },
     },

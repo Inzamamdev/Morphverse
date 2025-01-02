@@ -1,91 +1,72 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-export default function HumanAnimation() {
-  const [state, setState] = useState<"idle" | "running" | "jumping">("idle");
+const HumanAnimation: React.FC = () => {
+  const [state, setState] = useState<'idle' | 'walk' | 'run' | 'jump'>('idle');
+
+  const handleStateChange = (newState: 'idle' | 'walk' | 'run' | 'jump') => {
+    setState(newState);
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 200 200"
-        className={`w-48 h-48 ${
-          state === "running" ? "animate-run" : ""
-        } ${state === "jumping" ? "animate-jump" : ""}`}
-      >
-        {/* Head */}
-        <circle cx="100" cy="40" r="15" fill="black" />
-
-        {/* Body */}
-        <line
-          x1="100"
-          y1="55"
-          x2="100"
-          y2="100"
-          stroke="black"
-          strokeWidth="3"
-        />
-
-        {/* Arms (Running animation) */}
-        <path
-          d="M100 65 Q90 75 80 85"
-          fill="none"
-          stroke="black"
-          strokeWidth="3"
-          className={`transition-transform ${
-            state === "running" ? "animate-arm-left" : ""
-          }`}
-        />
-        <path
-          d="M100 65 Q110 75 120 85"
-          fill="none"
-          stroke="black"
-          strokeWidth="3"
-          className={`transition-transform ${
-            state === "running" ? "animate-arm-right" : ""
-          }`}
-        />
-
-        {/* Legs (Running animation) */}
-        <path
-          d="M100 100 Q95 115 90 130"
-          fill="none"
-          stroke="black"
-          strokeWidth="3"
-          className={`transition-transform ${
-            state === "running" ? "animate-leg-left" : ""
-          }`}
-        />
-        <path
-          d="M100 100 Q105 115 110 130"
-          fill="none"
-          stroke="black"
-          strokeWidth="3"
-          className={`transition-transform ${
-            state === "running" ? "animate-leg-right" : ""
-          }`}
-        />
-      </svg>
-
-      <div className="mt-6 space-x-4">
-        <button
-          onClick={() => setState("idle")}
-          className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-        >
-          Idle
-        </button>
-        <button
-          onClick={() => setState("running")}
-          className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
-        >
-          Run
-        </button>
-        <button
-          onClick={() => setState("jumping")}
-          className="px-4 py-2 text-white bg-yellow-500 rounded hover:bg-yellow-600"
-        >
-          Jump
-        </button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex space-x-4 mb-8">
+        <button onClick={() => handleStateChange('idle')} className="px-4 py-2 bg-blue-500 text-white rounded">Idle</button>
+        <button onClick={() => handleStateChange('walk')} className="px-4 py-2 bg-green-500 text-white rounded">Walk</button>
+        <button onClick={() => handleStateChange('run')} className="px-4 py-2 bg-red-500 text-white rounded">Run</button>
+        <button onClick={() => handleStateChange('jump')} className="px-4 py-2 bg-yellow-500 text-white rounded">Jump</button>
+      </div>
+      <div className="w-32 h-32">
+        {state === 'idle' && <Idle />}
+        {state === 'walk' && <Walk />}
+        {state === 'run' && <Run />}
+        {state === 'jump' && <Jump />}
       </div>
     </div>
   );
-}
+};
+
+const Idle: React.FC = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full animate-idle">
+    <circle cx="50" cy="50" r="10" fill="black" />
+    <line x1="50" y1="60" x2="50" y2="80" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="80" x2="45" y2="90" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="80" x2="55" y2="90" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="60" x2="45" y2="70" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="60" x2="55" y2="70" stroke="black" strokeWidth="2" />
+  </svg>
+);
+
+const Walk: React.FC = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full animate-walk">
+    <circle cx="50" cy="50" r="10" fill="black" />
+    <line x1="50" y1="60" x2="50" y2="80" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="80" x2="40" y2="90" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="80" x2="60" y2="90" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="60" x2="40" y2="70" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="60" x2="60" y2="70" stroke="black" strokeWidth="2" />
+  </svg>
+);
+
+const Run: React.FC = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full animate-run">
+    <circle cx="50" cy="50" r="10" fill="black" />
+    <line x1="50" y1="60" x2="50" y2="80" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="80" x2="35" y2="85" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="80" x2="65" y2="85" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="60" x2="35" y2="65" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="60" x2="65" y2="65" stroke="black" strokeWidth="2" />
+  </svg>
+);
+
+const Jump: React.FC = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full animate-jump">
+    <circle cx="50" cy="50" r="10" fill="black" />
+    <line x1="50" y1="60" x2="50" y2="80" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="80" x2="45" y2="90" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="80" x2="55" y2="90" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="60" x2="45" y2="70" stroke="black" strokeWidth="2" />
+    <line x1="50" y1="60" x2="55" y2="70" stroke="black" strokeWidth="2" />
+  </svg>
+);
+
+export default HumanAnimation;
