@@ -2,10 +2,14 @@ import { EngineProvider } from "../context/EngineProvider";
 import { Ground } from "./Ground";
 import { Player } from "./Player";
 
-export default function Scene() {
+interface Props {
+  shape: string
+}
+
+export default function Scene({ shape }: Props) {
   return (
     <EngineProvider>
-      <Player />
+      <Player shape={shape} />
       <Ground x={400} y={202} width={700} height={20} />
       <Ground x={400} y={408} width={1000} height={20} />
     </EngineProvider>
