@@ -3,10 +3,10 @@ import Scene from "./components/Scene";
 
 function App() {
   return (
-    <div className="w-screen min-h-screen h-full grid items-center">
+    <div className="w-screen  grid items-center">
       <Scene />
     </div>
-  )
+  );
 }
 
 export default App;
