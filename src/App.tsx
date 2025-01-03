@@ -3,7 +3,7 @@ import Scene from "./components/Scene";
 
 function App() {
   return (
-    <div className="w-screen  grid items-center">
+    <div className="grid items-center">
       <Scene />
     </div>
   );
