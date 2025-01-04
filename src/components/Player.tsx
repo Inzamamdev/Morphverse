@@ -3,6 +3,7 @@ import Matter from "matter-js";
 import { useEngine } from "../context/EngineProvider";
 import { PlayerControls } from "./PlayerControls";
 
+import { CurrrentPosition } from "../utils/currentPosition";
 interface Props {
   shape: string;
 }
@@ -11,45 +12,17 @@ export const Player = ({ shape }: Props) => {
   const engine = useEngine();
   const playerRef = useRef<HTMLDivElement | null>(null);
   const playerBodyRef = useRef<Matter.Body | null>(null);
-  const triangleVertices = [
-    { x: 0, y: 0 },
-    { x: 15, y: 30 },
-    { x: -15, y: 30 },
-  ];
+
   useEffect(() => {
-    const { World, Bodies } = Matter;
+    const { World } = Matter;
 
-    let playerBody: Matter.Body;
-
-    if (shape == 'plank') {
-      playerBody = Bodies.rectangle(100, 100, 15, 40, {
-        friction: 1,
-      });
-    } else if (shape == 'circle') {
-      playerBody = Bodies.circle(100, 100, 20, {
-        friction: 1,
-      });
-    }
-    else {
-      playerBody = Matter.Bodies.fromVertices(
-        200, // x position
-        200, // y position
-        [triangleVertices], // Vertices array
-        {
-          isStatic: false, // Make it dynamic
-          render: {
-            fillStyle: "blue", // Optional: Set a fill color for rendering
-          },
-        }
-      );
-    }
-
-    playerBodyRef.current = playerBody;
-
-    World.add(engine.world, playerBody);
+    CurrrentPosition(shape, engine, playerBodyRef);
 
     return () => {
-      World.remove(engine.world, playerBody);
+      const oldBody = playerBodyRef.current;
+      if (oldBody) {
+        World.remove(engine.world, oldBody);
+      }
     };
   }, [engine, shape]);
 
@@ -62,7 +35,9 @@ export const Player = ({ shape }: Props) => {
 
     const updatePosition = () => {
       if (playerRef.current) {
-        playerRef.current.style.transform = `translate(${playerBody.position.x - 20}px, ${playerBody.position.y - 20}px)`;
+        playerRef.current.style.transform = `translate(${
+          playerBody.position.x - 20
+        }px, ${playerBody.position.y - 20}px)`;
       }
     };
 
@@ -73,9 +48,7 @@ export const Player = ({ shape }: Props) => {
     };
   }, [engine]);
   return (
-    <div
-      ref={playerRef}
-    >
+    <div ref={playerRef}>
       <PlayerControls playerBodyRef={playerBodyRef} />
     </div>
   );
