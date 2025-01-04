@@ -11,7 +11,7 @@ export const CurrrentPosition = (
   const oldBody = playerBodyRef.current;
 
   // Get the current position or default to (100, 100)
-  const x = oldBody ? oldBody.position.x : 100;
+  const x = oldBody ? oldBody.position.x : 400;
   const y = oldBody ? oldBody.position.y : 100;
 
   // Remove the old body if it exists

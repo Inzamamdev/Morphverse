@@ -11,9 +11,9 @@ export const createBody = (
 ): Matter.Body => {
   const { Bodies } = Matter;
   if (shape === "plank") {
-    return Bodies.rectangle(x, y, 15, 40, { friction: 1 });
+    return Bodies.rectangle(x, y, 15, 40);
   } else if (shape === "circle") {
-    return Bodies.circle(x, y, 20, { friction: 1 });
+    return Bodies.circle(x, y, 20, { restitution: 0.5 });
   } else {
     return Bodies.fromVertices(x, y, [triangleVertices], {
       isStatic: false,

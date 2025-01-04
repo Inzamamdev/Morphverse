@@ -28,6 +28,28 @@ export const Player = ({ shape }: Props) => {
 
   useEffect(() => {
     const { Events } = Matter;
+    const particles = [];
+    const particleOptions = {
+      friction: 0, // No surface friction
+      frictionAir: 0.05, // Simulates drag in air
+      restitution: 0.2, // Some bounce to simulate interaction
+      render: {
+        fillStyle: "blue",
+      },
+    };
+
+    // Generate particles
+    for (let i = 0; i < 500; i++) {
+      const particle = Matter.Bodies.circle(
+        200 + Math.random() * 50 - 50, // Random x position
+        50 + Math.random() * 100, // Random y position
+        1, // Radius
+        particleOptions
+      );
+      particles.push(particle);
+    }
+
+    Matter.World.add(engine.world, particles);
 
     const playerBody = playerBodyRef.current;
 
@@ -49,7 +71,7 @@ export const Player = ({ shape }: Props) => {
   }, [engine]);
   return (
     <div ref={playerRef}>
-      <PlayerControls playerBodyRef={playerBodyRef} />
+      <PlayerControls playerBodyRef={playerBodyRef} shape={shape} />
     </div>
   );
 };

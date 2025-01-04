@@ -2,83 +2,92 @@ import Matter from "matter-js";
 import { useEffect, useRef, useState } from "react";
 
 interface Props {
-    playerBodyRef: React.RefObject<Matter.Body>;
+  playerBodyRef: React.RefObject<Matter.Body>;
+  shape: string;
 }
 
-export const PlayerControls = ({ playerBodyRef }: Props) => {
-    const [keysPressed, setKeysPressed] = useState<Record<string, boolean>>({});
-    const [jumpCount, setJumpCount] = useState(0);
-    const [jumpKeyPressed, setJumpKeyPressed] = useState(false);
+export const PlayerControls = ({ playerBodyRef, shape }: Props) => {
+  const [keysPressed, setKeysPressed] = useState<Record<string, boolean>>({});
+  const [jumpCount, setJumpCount] = useState(0);
+  const [jumpKeyPressed, setJumpKeyPressed] = useState(false);
 
-    const animationFrameRef = useRef<number | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
-    useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            setKeysPressed((prev) => ({ ...prev, [event.key]: true }));
-        };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      setKeysPressed((prev) => ({ ...prev, [event.key]: true }));
+    };
 
-        const handleKeyUp = (event: KeyboardEvent) => {
-            setKeysPressed((prev) => ({ ...prev, [event.key]: false }));
-        };
+    const handleKeyUp = (event: KeyboardEvent) => {
+      setKeysPressed((prev) => ({ ...prev, [event.key]: false }));
+    };
 
-        window.addEventListener("keydown", handleKeyDown);
-        window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
 
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-            window.removeEventListener("keyup", handleKeyUp);
-        };
-    }, []);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
 
-    useEffect(() => {
-        const { Body } = Matter;
-        const playerBody = playerBodyRef.current;
+  useEffect(() => {
+    const { Body } = Matter;
+    const playerBody = playerBodyRef.current;
 
-        if (!playerBody) return;
+    if (!playerBody) return;
 
-        const gameLoop = () => {
-            // Continuous left and right movement
-            if (keysPressed["ArrowLeft"]) {
-                Body.setVelocity(playerBody, { x: -1, y: playerBody.velocity.y });
-            }
-            if (keysPressed["ArrowRight"]) {
-                Body.setVelocity(playerBody, { x: 1, y: playerBody.velocity.y });
-            }
+    if (shape == "triangle") {
+      Body.setAngularVelocity(playerBody, 0.2);
+    }
+    if (shape == "circle") {
+      Body.setAngularVelocity(playerBody, 0.5);
+    }
 
-            // Jump logic
-            if (keysPressed[" "] && !jumpKeyPressed) {
-                if (jumpCount < 2) {
-                    Body.applyForce(playerBody, playerBody.position, {
-                        x: 0,
-                        y: -0.023 * playerBody.mass,
-                    });
-                    setJumpCount((prev) => prev + 1);
-                }
-                setJumpKeyPressed(true);
-            }
+    const gameLoop = () => {
+      // Continuous left and right movement
 
-            if (!keysPressed[" "]) {
-                setJumpKeyPressed(false);
-            }
+      if (keysPressed["ArrowLeft"]) {
+        Body.setVelocity(playerBody, { x: -1, y: playerBody.velocity.y });
+      }
+      if (keysPressed["ArrowRight"]) {
+        Body.setVelocity(playerBody, { x: 1, y: playerBody.velocity.y });
+      }
 
-            // Reset jump count when on the ground
-            if (Math.abs(playerBody.velocity.y) < 0.01 && jumpCount > 0) {
-                setJumpCount(0);
-            }
+      // Jump logic
+      if (keysPressed[" "] && !jumpKeyPressed) {
+        if (jumpCount < 2) {
+          Body.applyForce(playerBody, playerBody.position, {
+            x: 0,
+            y: -0.023 * playerBody.mass,
+          });
+          setJumpCount((prev) => prev + 1);
+        }
+        setJumpKeyPressed(true);
+      }
 
-            // Continue the animation loop
-            animationFrameRef.current = requestAnimationFrame(gameLoop);
-        };
+      if (!keysPressed[" "]) {
+        setJumpKeyPressed(false);
+      }
 
-        // Start the game loop
-        animationFrameRef.current = requestAnimationFrame(gameLoop);
+      // Reset jump count when on the ground
+      if (Math.abs(playerBody.velocity.y) < 0.01 && jumpCount > 0) {
+        setJumpCount(0);
+      }
 
-        return () => {
-            if (animationFrameRef.current) {
-                cancelAnimationFrame(animationFrameRef.current);
-            }
-        };
-    }, [keysPressed, playerBodyRef, jumpKeyPressed, jumpCount]);
+      // Continue the animation loop
+      animationFrameRef.current = requestAnimationFrame(gameLoop);
+    };
 
-    return <></>;
+    // Start the game loop
+    animationFrameRef.current = requestAnimationFrame(gameLoop);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [keysPressed, playerBodyRef, jumpKeyPressed, jumpCount]);
+
+  return <></>;
 };

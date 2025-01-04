@@ -2,19 +2,29 @@ import { useEffect } from "react";
 import Matter from "matter-js";
 import { useEngine } from "../context/EngineProvider";
 
-export const Ground: React.FC<{ x: number; y: number; width: number; height: number }> = ({ x, y, width, height }) => {
-    const engine = useEngine();
+export const Ground: React.FC<{
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  angle: number;
+}> = ({ x, y, width, height, angle }) => {
+  const engine = useEngine();
 
-    useEffect(() => {
-        const { World, Bodies } = Matter;
+  useEffect(() => {
+    const { World, Bodies } = Matter;
 
-        const ground = Bodies.rectangle(x, y, width, height, { isStatic: true });
-        World.add(engine.world, ground);
+    const ground = Bodies.rectangle(x, y, width, height, {
+      isStatic: true,
+      angle: angle,
+    });
 
-        return () => {
-            World.remove(engine.world, ground);
-        };
-    }, [engine, x, y, width, height]);
+    World.add(engine.world, ground);
 
-    return null;
+    return () => {
+      World.remove(engine.world, ground);
+    };
+  }, [engine, x, y, width, height]);
+
+  return null;
 };
