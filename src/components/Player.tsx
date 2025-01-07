@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import Matter from "matter-js";
+import Matter, { Collision } from "matter-js";
 import { useEngine } from "../context/EngineProvider";
 import { PlayerControls } from "./PlayerControls";
 
@@ -64,11 +64,27 @@ export const Player = ({ shape }: Props) => {
     };
 
     Events.on(engine, "afterUpdate", updatePosition);
+    Events.on(engine, "collisionStart", (event) => {
+      const pairs = event.pairs;
 
+      // Iterate through all detected collisions
+      pairs.forEach((pair) => {
+        const bodyA = pair.bodyA.label;
+        const bodyB = pair.bodyB.label;
+
+        if (bodyA != "ground" && bodyB != "ground") {
+          if (bodyA == "player" || bodyB == "player") {
+            console.log("Collide");
+          }
+        }
+      });
+    });
     return () => {
       Events.off(engine, "afterUpdate", updatePosition);
+      Events.off(engine, "collisionStart");
     };
   }, [engine]);
+
   return (
     <div ref={playerRef}>
       <PlayerControls playerBodyRef={playerBodyRef} shape={shape} />

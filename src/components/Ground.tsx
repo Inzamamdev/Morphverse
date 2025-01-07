@@ -17,6 +17,7 @@ export const Ground: React.FC<{
     const ground = Bodies.rectangle(x, y, width, height, {
       isStatic: true,
       angle: angle,
+      label: "ground",
     });
 
     World.add(engine.world, ground);

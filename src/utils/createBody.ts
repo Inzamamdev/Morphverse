@@ -11,14 +11,15 @@ export const createBody = (
 ): Matter.Body => {
   const { Bodies } = Matter;
   if (shape === "plank") {
-    return Bodies.rectangle(x, y, 15, 40);
+    return Bodies.rectangle(x, y, 15, 40, { label: "player" });
   } else if (shape === "circle") {
-    return Bodies.circle(x, y, 20, { restitution: 0.5 });
+    return Bodies.circle(x, y, 20, { restitution: 0.7, label: "player" });
   } else {
     return Bodies.fromVertices(x, y, [triangleVertices], {
       isStatic: false,
       friction: 1,
       render: { fillStyle: "blue" },
+      label: "player",
     });
   }
 };
