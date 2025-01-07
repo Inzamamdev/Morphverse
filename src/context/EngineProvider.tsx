@@ -3,7 +3,9 @@ import Matter from "matter-js";
 
 const EngineContext = createContext<Matter.Engine | null>(null);
 
-export const EngineProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const EngineProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const engineRef = useRef<Matter.Engine>(Matter.Engine.create());
   const renderRef = useRef<Matter.Render | null>(null);
 
@@ -35,7 +37,11 @@ export const EngineProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
   }, []);
 
-  return <EngineContext.Provider value={engineRef.current}>{children}</EngineContext.Provider>;
+  return (
+    <EngineContext.Provider value={engineRef.current}>
+      {children}
+    </EngineContext.Provider>
+  );
 };
 
 export const useEngine = () => {

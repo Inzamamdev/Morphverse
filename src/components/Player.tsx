@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import Matter, { Collision } from "matter-js";
+import Matter from "matter-js";
 import { useEngine } from "../context/EngineProvider";
 import { PlayerControls } from "./PlayerControls";
 
