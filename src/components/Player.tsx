@@ -34,15 +34,15 @@ export const Player = ({ shape }: Props) => {
       frictionAir: 0.05, // Simulates drag in air
       restitution: 0.2, // Some bounce to simulate interaction
       render: {
-        fillStyle: "blue",
+        fillStyle: "orange",
       },
     };
 
     // Generate particles
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 250; i++) {
       const particle = Matter.Bodies.circle(
         200 + Math.random() * 50 - 50, // Random x position
-        50 + Math.random() * 100, // Random y position
+        -100 + Math.random() * 100, // Random y position
         1, // Radius
         particleOptions
       );
