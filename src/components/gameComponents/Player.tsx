@@ -1,17 +1,20 @@
 import { useEffect, useRef } from "react";
 import Matter from "matter-js";
-import { useEngine } from "../context/EngineProvider";
 import { PlayerControls } from "./PlayerControls";
 
-import { CurrrentPosition } from "../utils/currentPosition";
+import { CurrrentPosition } from "../../utils/currentPosition";
 interface Props {
   shape: string;
+  engine: Matter.Engine;
 }
 
-export const Player = ({ shape }: Props) => {
-  const engine = useEngine();
+export const Player = ({ shape, engine }: Props) => {
+
   const playerRef = useRef<HTMLDivElement | null>(null);
   const playerBodyRef = useRef<Matter.Body | null>(null);
+
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = 400;
 
   useEffect(() => {
     const { World } = Matter;
@@ -28,28 +31,6 @@ export const Player = ({ shape }: Props) => {
 
   useEffect(() => {
     const { Events } = Matter;
-    const particles = [];
-    const particleOptions = {
-      friction: 0, // No surface friction
-      frictionAir: 0.05, // Simulates drag in air
-      restitution: 0.2, // Some bounce to simulate interaction
-      render: {
-        fillStyle: "orange",
-      },
-    };
-
-    // Generate particles
-    for (let i = 0; i < 250; i++) {
-      const particle = Matter.Bodies.circle(
-        200 + Math.random() * 50 - 50, // Random x position
-        -100 + Math.random() * 100, // Random y position
-        1, // Radius
-        particleOptions
-      );
-      particles.push(particle);
-    }
-
-    Matter.World.add(engine.world, particles);
 
     const playerBody = playerBodyRef.current;
 
@@ -57,9 +38,13 @@ export const Player = ({ shape }: Props) => {
 
     const updatePosition = () => {
       if (playerRef.current) {
-        playerRef.current.style.transform = `translate(${
-          playerBody.position.x - 20
-        }px, ${playerBody.position.y - 20}px)`;
+        playerRef.current.style.transform = `translate(${playerBody.position.x - 20
+          }px, ${playerBody.position.y - 20}px)`;
+
+        if (playerBody.position.x < 0 || playerBody.position.x > viewportWidth || playerBody.position.y < 0 || playerBody.position.y > viewportHeight) {
+          alert('player fell')
+          // Add additional logic if needed, e.g., reset player position
+        }
       }
     };
 
@@ -67,7 +52,6 @@ export const Player = ({ shape }: Props) => {
     Events.on(engine, "collisionStart", (event) => {
       const pairs = event.pairs;
 
-      // Iterate through all detected collisions
       pairs.forEach((pair) => {
         const bodyA = pair.bodyA.label;
         const bodyB = pair.bodyB.label;
@@ -87,7 +71,7 @@ export const Player = ({ shape }: Props) => {
 
   return (
     <div ref={playerRef}>
-      <PlayerControls playerBodyRef={playerBodyRef} shape={shape} />
+      <PlayerControls playerBodyRef={playerBodyRef} shape={shape} engine={engine} />
     </div>
   );
 };

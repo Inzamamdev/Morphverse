@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 interface Props {
   playerBodyRef: React.RefObject<Matter.Body>;
   shape: string;
+  engine: Matter.Engine;
 }
 
-export const PlayerControls = ({ playerBodyRef, shape }: Props) => {
+export const PlayerControls = ({ playerBodyRef, shape, engine }: Props) => {
   const [keysPressed, setKeysPressed] = useState<Record<string, boolean>>({});
   const [jumpCount, setJumpCount] = useState(0);
   const [jumpKeyPressed, setJumpKeyPressed] = useState(false);
-
   const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -32,26 +32,27 @@ export const PlayerControls = ({ playerBodyRef, shape }: Props) => {
   }, []);
 
   useEffect(() => {
-    const { Body } = Matter;
+    const { Body, Composite } = Matter;
     const playerBody = playerBodyRef.current;
 
     if (!playerBody) return;
 
     if (shape == "triangle") {
-      Body.setAngularVelocity(playerBody, 0.2);
+      Body.setSpeed(playerBody, 0.2);
     }
     if (shape == "circle") {
-      Body.setAngularVelocity(playerBody, 0.5);
+      Body.setSpeed(playerBody, -0.1);
     }
-
+    const world = engine.world;
     const gameLoop = () => {
-      // Continuous left and right movement
 
       if (keysPressed["ArrowLeft"]) {
         Body.setVelocity(playerBody, { x: -1, y: playerBody.velocity.y });
+        Composite.translate(world, { x: 1, y: 0 })
       }
       if (keysPressed["ArrowRight"]) {
         Body.setVelocity(playerBody, { x: 1, y: playerBody.velocity.y });
+        Composite.translate(world, { x: -1, y: 0 })
       }
 
       // Jump logic

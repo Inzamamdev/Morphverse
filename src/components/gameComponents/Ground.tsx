@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import Matter from "matter-js";
-import { useEngine } from "../context/EngineProvider";
 
 export const Ground: React.FC<{
   x: number;
@@ -8,9 +7,8 @@ export const Ground: React.FC<{
   width: number;
   height: number;
   angle: number;
-}> = ({ x, y, width, height, angle }) => {
-  const engine = useEngine();
-
+  engine: Matter.Engine;
+}> = ({ x, y, width, height, angle, engine }) => {
   useEffect(() => {
     const { World, Bodies } = Matter;
 
