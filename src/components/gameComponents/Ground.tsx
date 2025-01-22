@@ -8,14 +8,15 @@ export const Ground: React.FC<{
   height: number;
   angle: number;
   engine: Matter.Engine;
-}> = ({ x, y, width, height, angle, engine }) => {
+  label: string;
+}> = ({ x, y, width, height, angle, engine, label }) => {
   useEffect(() => {
     const { World, Bodies } = Matter;
 
     const ground = Bodies.rectangle(x, y, width, height, {
       isStatic: true,
       angle: angle,
-      label: "ground",
+      label: label,
     });
 
     World.add(engine.world, ground);

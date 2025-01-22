@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Matter from "matter-js";
 import { PlayerControls } from "./PlayerControls";
 
@@ -9,10 +9,10 @@ interface Props {
 }
 
 export const Player = ({ shape, engine }: Props) => {
-
   const playerRef = useRef<HTMLDivElement | null>(null);
   const playerBodyRef = useRef<Matter.Body | null>(null);
-
+  const [bodyA, setBodyA] = useState("");
+  const [bodyB, setBodyB] = useState("");
   const viewportWidth = window.innerWidth;
   const viewportHeight = 400;
 
@@ -38,11 +38,17 @@ export const Player = ({ shape, engine }: Props) => {
 
     const updatePosition = () => {
       if (playerRef.current) {
-        playerRef.current.style.transform = `translate(${playerBody.position.x - 20
-          }px, ${playerBody.position.y - 20}px)`;
+        playerRef.current.style.transform = `translate(${
+          playerBody.position.x - 20
+        }px, ${playerBody.position.y - 20}px)`;
 
-        if (playerBody.position.x < 0 || playerBody.position.x > viewportWidth || playerBody.position.y < 0 || playerBody.position.y > viewportHeight) {
-          alert('player fell')
+        if (
+          playerBody.position.x < 0 ||
+          playerBody.position.x > viewportWidth ||
+          playerBody.position.y < 0 ||
+          playerBody.position.y > viewportHeight
+        ) {
+          alert("player fell");
           // Add additional logic if needed, e.g., reset player position
         }
       }
@@ -53,8 +59,8 @@ export const Player = ({ shape, engine }: Props) => {
       const pairs = event.pairs;
 
       pairs.forEach((pair) => {
-        const bodyA = pair.bodyA.label;
-        const bodyB = pair.bodyB.label;
+        setBodyA(pair.bodyA.label);
+        setBodyB(pair.bodyB.label);
 
         if (bodyA != "ground" && bodyB != "ground") {
           if (bodyA == "player" || bodyB == "player") {
@@ -71,7 +77,13 @@ export const Player = ({ shape, engine }: Props) => {
 
   return (
     <div ref={playerRef}>
-      <PlayerControls playerBodyRef={playerBodyRef} shape={shape} engine={engine} />
+      <PlayerControls
+        playerBodyRef={playerBodyRef}
+        shape={shape}
+        engine={engine}
+        bodyA={bodyA}
+        bodyB={bodyB}
+      />
     </div>
   );
 };

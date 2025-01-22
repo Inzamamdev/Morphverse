@@ -11,7 +11,7 @@ export const createBody = (
 ): Matter.Body => {
   const { Bodies } = Matter;
   if (shape === "plank") {
-    return Bodies.rectangle(x, y, 15, 40, { label: "player" });
+    return Bodies.rectangle(x, y, 20, 60, { label: "player" });
   } else if (shape === "circle") {
     return Bodies.circle(x, y, 20, { restitution: 0.7, label: "player" });
   } else {
